@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "polliforge",
+  "name": "polliforge-ai",
   "main": "src/index.ts",
   "compatibility_date": "2024-09-20",
   "compatibility_flags": ["nodejs_compat"],
@@ -11,6 +11,6 @@
     "not_found_handling": "single-page-application"
   },
   "vars": {
-    "POLLINATIONS_APP_KEY": ""
+    "POLLINATIONS_APP_KEY": "pk_sQmsxdbrgIH6H7kJ"
   }
 }
