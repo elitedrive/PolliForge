@@ -12,5 +12,6 @@
   },
   "vars": {
     "POLLINATIONS_APP_KEY": "pk_sQmsxdbrgIH6H7kJ"
-  }
+  },
+  "workers_dev": true
 }
