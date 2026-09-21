@@ -33,7 +33,83 @@ app.get("/api/config", (c) => {
   });
 });
 
-// Image proxy to avoid CORS/tainted canvas issues when generating .zip icon bundles
+// Authenticated Image Generation via gen.pollinations.ai with fallback
+app.get("/api/image", async (c) => {
+  const prompt = c.req.query("prompt");
+  if (!prompt) {
+    return c.json({ error: "Missing prompt query parameter" }, 400);
+  }
+
+  const model = c.req.query("model") || "flux";
+  const width = c.req.query("width") || "512";
+  const height = c.req.query("height") || "512";
+  const seed = c.req.query("seed") || "-1";
+
+  // Get token from Authorization header or query param
+  const authHeader = c.req.header("Authorization");
+  const tokenQuery = c.req.query("token");
+  const token = authHeader ? authHeader.replace("Bearer ", "").trim() : tokenQuery;
+
+  // Primary authenticated endpoint
+  const targetUrl = new URL(`https://gen.pollinations.ai/image/${encodeURIComponent(prompt)}`);
+  targetUrl.searchParams.set("model", model);
+  targetUrl.searchParams.set("width", width);
+  targetUrl.searchParams.set("height", height);
+  targetUrl.searchParams.set("seed", seed);
+
+  const fetchHeaders: Record<string, string> = {
+    "User-Agent": "PolliForge/1.0",
+    Accept: "image/*, application/json, */*",
+  };
+
+  if (token) {
+    fetchHeaders["Authorization"] = `Bearer ${token}`;
+  }
+
+  try {
+    const upstreamRes = await fetch(targetUrl.toString(), {
+      headers: fetchHeaders,
+    });
+
+    if (upstreamRes.ok) {
+      const contentType = upstreamRes.headers.get("content-type") || "image/jpeg";
+      const body = await upstreamRes.arrayBuffer();
+
+      return new Response(body, {
+        headers: {
+          "Content-Type": contentType,
+          "Access-Control-Allow-Origin": "*",
+          "Cache-Control": "public, max-age=86400, immutable",
+        },
+      });
+    }
+
+    // Fallback: If unauthenticated (401) or queue busy, try legacy image.pollinations.ai
+    const fallbackUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=${width}&height=${height}&seed=${seed}&model=${model}&nologo=true`;
+    const fallbackRes = await fetch(fallbackUrl, {
+      headers: { "User-Agent": "PolliForge/1.0" },
+    });
+
+    if (fallbackRes.ok) {
+      const contentType = fallbackRes.headers.get("content-type") || "image/jpeg";
+      const body = await fallbackRes.arrayBuffer();
+      return new Response(body, {
+        headers: {
+          "Content-Type": contentType,
+          "Access-Control-Allow-Origin": "*",
+          "Cache-Control": "public, max-age=86400",
+        },
+      });
+    }
+
+    const errText = await upstreamRes.text();
+    return c.json({ error: "Upstream generation failed", details: errText }, upstreamRes.status as any);
+  } catch (err: any) {
+    return c.json({ error: err.message || "Failed to generate image" }, 500);
+  }
+});
+
+// Image proxy for canvas/zip downloads
 app.get("/api/proxy-image", async (c) => {
   const imageUrl = c.req.query("url");
   if (!imageUrl) {

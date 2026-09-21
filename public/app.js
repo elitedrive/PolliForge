@@ -367,15 +367,6 @@ async function generateIcons() {
   // Active Key: Access token from BYOP or manual key
   const activeKey = state.apiKey || state.accessToken;
 
-  // Build 4 URLs
-  const newUrls = seeds.map((seed) => {
-    let url = `https://image.pollinations.ai/prompt/${encodeURIComponent(basePrompt)}?width=512&height=512&seed=${seed}&model=${state.selectedModel}&nologo=true`;
-    if (activeKey) {
-      url += `&key=${encodeURIComponent(activeKey)}`;
-    }
-    return url;
-  });
-
   // Set card loading skeletons
   const cards = document.querySelectorAll(".icon-result-card");
   cards.forEach((card) => {
@@ -386,37 +377,56 @@ async function generateIcons() {
     card.classList.add("skeleton-loading");
   });
 
-  // Load all 4 images with robust fallback
+  // Fetch all 4 variations via authenticated /api/image endpoint
   try {
-    await Promise.all(
-      newUrls.map((url, i) => {
-        return new Promise((resolve) => {
-          const testImg = new Image();
-          testImg.crossOrigin = "anonymous";
-          testImg.onload = () => {
-            state.generatedImages[i] = url;
-            const cardImg = cards[i]?.querySelector("img");
-            if (cardImg) {
-              cardImg.src = url;
-              cardImg.classList.remove("opacity-20");
-            }
-            cards[i]?.classList.remove("skeleton-loading");
-            resolve(true);
-          };
-          testImg.onerror = () => {
-            // If failed (e.g. rate limit), keep previous or fallback image
-            const cardImg = cards[i]?.querySelector("img");
-            if (cardImg) {
-              cardImg.src = url;
-              cardImg.classList.remove("opacity-20");
-            }
-            cards[i]?.classList.remove("skeleton-loading");
-            resolve(false);
-          };
-          testImg.src = url;
+    const fetchPromises = seeds.map(async (seed, i) => {
+      const card = cards[i];
+      const cardImg = card?.querySelector("img");
+
+      // Stagger slightly (150ms) to ensure smooth parallel queuing
+      if (i > 0) {
+        await new Promise((res) => setTimeout(res, i * 150));
+      }
+
+      let apiUrl = `/api/image?prompt=${encodeURIComponent(basePrompt)}&seed=${seed}&model=${state.selectedModel}&width=512&height=512`;
+      if (activeKey) {
+        apiUrl += `&token=${encodeURIComponent(activeKey)}`;
+      }
+
+      try {
+        const res = await fetch(apiUrl, {
+          headers: activeKey ? { Authorization: `Bearer ${activeKey}` } : {},
         });
-      })
-    );
+
+        if (!res.ok) {
+          throw new Error(`Generation failed with status ${res.status}`);
+        }
+
+        const blob = await res.blob();
+        const objectUrl = URL.createObjectURL(blob);
+        state.generatedImages[i] = objectUrl;
+
+        if (cardImg) {
+          cardImg.src = objectUrl;
+          cardImg.classList.remove("opacity-20");
+        }
+        card?.classList.remove("skeleton-loading");
+        return true;
+      } catch (err) {
+        console.warn(`Variation ${i + 1} fallback:`, err);
+        // Fallback gracefully to default SVG icon - NEVER assign broken URL to img.src!
+        const fallbackSvg = defaultIcons[i % defaultIcons.length];
+        state.generatedImages[i] = fallbackSvg;
+        if (cardImg) {
+          cardImg.src = fallbackSvg;
+          cardImg.classList.remove("opacity-20");
+        }
+        card?.classList.remove("skeleton-loading");
+        return false;
+      }
+    });
+
+    await Promise.all(fetchPromises);
   } finally {
     state.isGenerating = false;
     btnForge.disabled = false;
