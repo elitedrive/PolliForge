@@ -3,6 +3,105 @@
  * Powered by Pollinations.ai (Flux + DeepSeek/OpenAI) with BYOP OAuth PKCE
  */
 
+// 4 Ultra-Crisp Initial Sample Icons (0ms latency, zero broken images, pure vector SVG)
+const defaultIcons = [
+  // Icon 1: Golden Flame & Anvil (Amber/Violet)
+  `data:image/svg+xml;utf8,${encodeURIComponent(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+      <defs>
+        <radialGradient id="bg1" cx="50%" cy="30%" r="70%">
+          <stop offset="0%" stop-color="#1e1838"/>
+          <stop offset="100%" stop-color="#0a0b12"/>
+        </radialGradient>
+        <linearGradient id="flame" x1="0%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%" stop-color="#d97706"/>
+          <stop offset="50%" stop-color="#f59e0b"/>
+          <stop offset="100%" stop-color="#fef08a"/>
+        </linearGradient>
+        <filter id="glow1" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="14" result="blur"/>
+          <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+        </filter>
+      </defs>
+      <rect width="512" height="512" rx="115" fill="url(#bg1)"/>
+      <rect width="504" height="504" x="4" y="4" rx="112" fill="none" stroke="rgba(245,158,11,0.3)" stroke-width="4"/>
+      <g filter="url(#glow1)" transform="translate(106, 75)">
+        <path d="M150 20 C110 90, 80 140, 80 200 C80 280, 140 320, 150 320 C160 320, 220 280, 220 200 C220 150, 185 90, 150 20 Z" fill="url(#flame)"/>
+        <path d="M150 110 C135 150, 120 180, 120 220 C120 260, 140 280, 150 280 C160 280, 180 260, 180 220 C180 185, 165 150, 150 110 Z" fill="#ffffff" opacity="0.9"/>
+        <rect x="50" y="270" width="200" height="36" rx="10" fill="#f59e0b" opacity="0.95"/>
+        <path d="M70 306 L90 350 L210 350 L230 306 Z" fill="#b45309"/>
+      </g>
+    </svg>
+  `)}`,
+  // Icon 2: Minimalist Geometric Tech Hammer & Sparks (Purple/Amber)
+  `data:image/svg+xml;utf8,${encodeURIComponent(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+      <defs>
+        <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#18132b"/>
+          <stop offset="100%" stop-color="#08070e"/>
+        </linearGradient>
+        <linearGradient id="purpleGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#8b5cf6"/>
+          <stop offset="100%" stop-color="#ec4899"/>
+        </linearGradient>
+      </defs>
+      <rect width="512" height="512" rx="115" fill="url(#bg2)"/>
+      <rect width="504" height="504" x="4" y="4" rx="112" fill="none" stroke="rgba(139,92,246,0.3)" stroke-width="4"/>
+      <g transform="translate(136, 115)">
+        <circle cx="120" cy="136" r="100" fill="url(#purpleGlow)" opacity="0.2"/>
+        <path d="M60 60 L140 140 L120 160 L40 80 Z" fill="#a78bfa"/>
+        <rect x="120" y="30" width="80" height="50" rx="8" transform="rotate(45 160 55)" fill="#fbbf24"/>
+        <circle cx="200" cy="40" r="10" fill="#f59e0b"/>
+        <circle cx="225" cy="85" r="7" fill="#ec4899"/>
+        <circle cx="180" cy="115" r="9" fill="#8b5cf6"/>
+      </g>
+    </svg>
+  `)}`,
+  // Icon 3: Modern Tech Monogram P (Isometric Glass)
+  `data:image/svg+xml;utf8,${encodeURIComponent(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+      <defs>
+        <linearGradient id="bg3" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#0e1726"/>
+          <stop offset="100%" stop-color="#060911"/>
+        </linearGradient>
+        <linearGradient id="cyanP" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#38bdf8"/>
+          <stop offset="100%" stop-color="#6366f1"/>
+        </linearGradient>
+      </defs>
+      <rect width="512" height="512" rx="115" fill="url(#bg3)"/>
+      <rect width="504" height="504" x="4" y="4" rx="112" fill="none" stroke="rgba(56,189,248,0.3)" stroke-width="4"/>
+      <g transform="translate(150, 110)">
+        <path d="M40 40 L130 40 C170 40, 190 65, 190 105 C190 145, 170 170, 130 170 L90 170 L90 260 L40 260 Z M90 90 L90 120 L125 120 C140 120, 145 110, 145 105 C145 100, 140 90, 125 90 Z" fill="url(#cyanP)"/>
+      </g>
+    </svg>
+  `)}`,
+  // Icon 4: Cyberpunk Neon Electric Forge (Fuchsia & Cyan)
+  `data:image/svg+xml;utf8,${encodeURIComponent(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+      <defs>
+        <linearGradient id="bg4" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#140a1c"/>
+          <stop offset="100%" stop-color="#050308"/>
+        </linearGradient>
+        <linearGradient id="neonPink" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#f43f5e"/>
+          <stop offset="100%" stop-color="#d946ef"/>
+        </linearGradient>
+      </defs>
+      <rect width="512" height="512" rx="115" fill="url(#bg4)"/>
+      <rect width="504" height="504" x="4" y="4" rx="112" fill="none" stroke="rgba(244,63,94,0.3)" stroke-width="4"/>
+      <g transform="translate(136, 126)">
+        <polygon points="120,20 210,180 30,180" fill="none" stroke="url(#neonPink)" stroke-width="16" stroke-linejoin="round"/>
+        <circle cx="120" cy="120" r="32" fill="#06b6d4"/>
+        <path d="M120 60 L120 180" stroke="#ffffff" stroke-width="4" opacity="0.6"/>
+      </g>
+    </svg>
+  `)}`
+];
+
 // State
 const state = {
   appName: "PolliForge",
@@ -16,12 +115,7 @@ const state = {
   apiKey: localStorage.getItem("polliforge_api_key") || "",
   accessToken: localStorage.getItem("polliforge_access_token") || "",
   appKey: "", // Discovered from /api/config or fallback
-  generatedImages: [
-    "https://image.pollinations.ai/prompt/app%20icon%20for%20PolliForge%2C%20glowing%20golden%20anvil%20and%20stylized%20flame%2C%20iOS%20glassmorphism%20squircle%2C%20isolated%20centered%2C%20high%20contrast%2C%20clean%20dark%20background%2C%20vector%20graphic%2C%20no%20text?width=512&height=512&nologo=true&seed=42",
-    "https://image.pollinations.ai/prompt/app%20icon%20for%20PolliForge%2C%20minimalist%20geometric%20flaming%20hammer%20and%20sparks%2C%20purple%20and%20amber%20colors%2C%20iOS%20squircle%2C%20centered%2C%20clean%20dark%20background%2C%20no%20text?width=512&height=512&nologo=true&seed=108",
-    "https://image.pollinations.ai/prompt/modern%20tech%20monogram%20icon%20for%20PolliForge%2C%20futuristic%20letter%20P%20and%20flame%20symbol%2C%20isometric%203D%20glass%2C%20clean%20dark%20background%2C%20no%20text?width=512&height=512&nologo=true&seed=333",
-    "https://image.pollinations.ai/prompt/cyberpunk%20neon%20app%20icon%20for%20PolliForge%2C%20electric%20forge%20with%20violet%20and%20cyan%20plasma%2C%20sleek%20iOS%20squircle%2C%20centered%2C%20no%20text?width=512&height=512&nologo=true&seed=777"
-  ]
+  generatedImages: [...defaultIcons]
 };
 
 // Style Presets with High-Performance Prompt Engineering
@@ -42,6 +136,11 @@ const palettePrompts = {
   "pure-monochrome": "ultra clean monochrome black, metallic platinum and silver colors"
 };
 
+// Returns exact callback URL registered in OAuth
+function getRedirectUri() {
+  return `${window.location.origin}/callback`;
+}
+
 // Initialize Application
 document.addEventListener("DOMContentLoaded", async () => {
   // Initialize Lucide icons
@@ -61,9 +160,21 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Setup DOM Event Listeners
   setupEventListeners();
 
-  // Update initial mockups
+  // Initial render of cards and mockups with pristine SVG assets
+  renderInitialCards();
   updateMockups();
 });
+
+// Render initial pristine cards
+function renderInitialCards() {
+  const cards = document.querySelectorAll(".icon-result-card");
+  cards.forEach((card, idx) => {
+    const img = card.querySelector("img");
+    if (img && state.generatedImages[idx]) {
+      img.src = state.generatedImages[idx];
+    }
+  });
+}
 
 // Load Server Configuration
 async function loadServerConfig() {
@@ -275,7 +386,7 @@ async function generateIcons() {
     card.classList.add("skeleton-loading");
   });
 
-  // Pre-load all 4 images
+  // Load all 4 images with robust fallback
   try {
     await Promise.all(
       newUrls.map((url, i) => {
@@ -293,8 +404,7 @@ async function generateIcons() {
             resolve(true);
           };
           testImg.onerror = () => {
-            // Fallback even if one fails
-            state.generatedImages[i] = url;
+            // If failed (e.g. rate limit), keep previous or fallback image
             const cardImg = cards[i]?.querySelector("img");
             if (cardImg) {
               cardImg.src = url;
@@ -325,10 +435,37 @@ async function downloadActiveIcon(resolution = 512) {
   const activeUrl = state.generatedImages[state.activeIconIndex];
   if (!activeUrl) return;
 
-  // If retina requested, replace 512 with resolution
-  const targetUrl = activeUrl.replace("width=512&height=512", `width=${resolution}&height=${resolution}`);
   const safeName = state.appName.toLowerCase().replace(/[^a-z0-9]/g, "-") || "icon";
 
+  // If it's a data URI (SVG)
+  if (activeUrl.startsWith("data:image/svg+xml")) {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = resolution;
+      canvas.height = resolution;
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        ctx.drawImage(img, 0, 0, resolution, resolution);
+        canvas.toBlob((blob) => {
+          if (!blob) return;
+          const blobUrl = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = blobUrl;
+          a.download = `${safeName}-icon-${resolution}x${resolution}.png`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(blobUrl);
+        });
+      }
+    };
+    img.src = activeUrl;
+    return;
+  }
+
+  // Remote URL -> Proxy for clean binary download
+  const targetUrl = activeUrl.replace("width=512&height=512", `width=${resolution}&height=${resolution}`);
   try {
     const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(targetUrl)}`;
     const response = await fetch(proxyUrl);
@@ -343,7 +480,6 @@ async function downloadActiveIcon(resolution = 512) {
     document.body.removeChild(a);
     URL.revokeObjectURL(blobUrl);
   } catch (err) {
-    // Direct link fallback
     window.open(targetUrl, "_blank");
   }
 }
@@ -364,17 +500,26 @@ async function exportDevBundleZip() {
     btnZipText.textContent = "Packaging Bundle...";
 
     const activeUrl = state.generatedImages[state.activeIconIndex];
-    const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(activeUrl.replace("width=512&height=512", "width=1024&height=1024"))}`;
+    let sourceImg;
 
-    const response = await fetch(proxyUrl);
-    if (!response.ok) throw new Error("Could not fetch source icon image");
-    const sourceBlob = await response.blob();
-    const sourceImg = await createImageBitmap(sourceBlob);
+    if (activeUrl.startsWith("data:image/svg+xml")) {
+      const img = new Image();
+      await new Promise((res) => {
+        img.onload = res;
+        img.src = activeUrl;
+      });
+      sourceImg = img;
+    } else {
+      const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(activeUrl.replace("width=512&height=512", "width=1024&height=1024"))}`;
+      const response = await fetch(proxyUrl);
+      if (!response.ok) throw new Error("Could not fetch source icon image");
+      const sourceBlob = await response.blob();
+      sourceImg = await createImageBitmap(sourceBlob);
+    }
 
     const zip = new JSZip();
     const safeName = state.appName.toLowerCase().replace(/[^a-z0-9]/g, "-") || "app";
 
-    // Helper to draw resized PNG canvas blob
     const renderCanvasBlob = (size) => {
       const canvas = document.createElement("canvas");
       canvas.width = size;
@@ -388,7 +533,6 @@ async function exportDevBundleZip() {
       return new Promise((res) => canvas.toBlob(res, "image/png"));
     };
 
-    // Render 512, 192, 180 (apple touch), and 32 (favicon)
     const [blob512, blob192, blobApple, blobFavicon] = await Promise.all([
       renderCanvasBlob(512),
       renderCanvasBlob(192),
@@ -396,13 +540,11 @@ async function exportDevBundleZip() {
       renderCanvasBlob(32)
     ]);
 
-    // Add files to ZIP
     zip.file("icon-512x512.png", blob512);
     zip.file("icon-192x192.png", blob192);
     zip.file("apple-touch-icon.png", blobApple);
     zip.file("favicon.png", blobFavicon);
 
-    // Web App Manifest
     const manifest = {
       name: state.appName,
       short_name: state.appName,
@@ -412,21 +554,12 @@ async function exportDevBundleZip() {
       background_color: "#090b11",
       theme_color: "#f59e0b",
       icons: [
-        {
-          src: "/icon-192x192.png",
-          sizes: "192x192",
-          type: "image/png"
-        },
-        {
-          src: "/icon-512x512.png",
-          sizes: "512x512",
-          type: "image/png"
-        }
+        { src: "/icon-192x192.png", sizes: "192x192", type: "image/png" },
+        { src: "/icon-512x512.png", sizes: "512x512", type: "image/png" }
       ]
     };
     zip.file("site.webmanifest", JSON.stringify(manifest, null, 2));
 
-    // README snippet
     const snippet = `<!-- PolliForge Icon Bundle for ${state.appName} -->
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -435,7 +568,6 @@ async function exportDevBundleZip() {
 `;
     zip.file("HTML-HEAD-SNIPPET.html", snippet);
 
-    // Generate ZIP
     const zipBlob = await zip.generateAsync({ type: "blob" });
     const blobUrl = URL.createObjectURL(zipBlob);
 
@@ -498,15 +630,15 @@ async function startBYOPLogin() {
   // Store verifier for callback
   localStorage.setItem("polliforge_pkce_verifier", verifier);
 
-  const redirectUri = window.location.origin + window.location.pathname;
-  const clientId = state.appKey || "pk_polliforge"; // Publishable App Key
+  const redirectUri = getRedirectUri();
+  const clientId = state.appKey || "pk_polliforge";
   const stateVal = generateRandomString(16);
 
   const authUrl = new URL("https://enter.pollinations.ai/authorize");
   authUrl.searchParams.set("response_type", "code");
   authUrl.searchParams.set("client_id", clientId);
   authUrl.searchParams.set("redirect_uri", redirectUri);
-  authUrl.searchParams.set("scope", "usage profile");
+  authUrl.searchParams.set("scope", "profile usage");
   authUrl.searchParams.set("code_challenge", challenge);
   authUrl.searchParams.set("code_challenge_method", "S256");
   authUrl.searchParams.set("state", stateVal);
@@ -521,7 +653,7 @@ async function handleOAuthCallback() {
   if (!code) return;
 
   const verifier = localStorage.getItem("polliforge_pkce_verifier");
-  const redirectUri = window.location.origin + window.location.pathname;
+  const redirectUri = getRedirectUri();
 
   try {
     const tokenRes = await fetch("/api/oauth/token", {
@@ -548,7 +680,7 @@ async function handleOAuthCallback() {
     console.error("Token exchange failed:", err);
   } finally {
     localStorage.removeItem("polliforge_pkce_verifier");
-    window.history.replaceState({}, document.title, window.location.pathname);
+    window.history.replaceState({}, document.title, "/");
   }
 }
 
@@ -577,7 +709,6 @@ async function refreshPollenBalance() {
     return;
   }
 
-  // Active key present -> Show connected state
   btnConnect.classList.add("hidden");
   pill.classList.remove("hidden");
   pill.classList.add("flex");
